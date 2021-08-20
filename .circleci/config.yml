@@ -35,6 +35,8 @@ jobs:
       enabled: true
     working_directory: /tmp/workspace
     steps:
+      - add_ssh_keys:
+          fingerprints: 'd4:3a:78:12:88:64:a0:91:32:83:e5:26:5f:77:89:94'
       - run: echo "====================部署开始=============================="
       - attach_workspace:
           at: /tmp/workspace
@@ -53,4 +55,4 @@ workflows:
             - build
           filters:
             branches:
-              only: master
+              only: main
