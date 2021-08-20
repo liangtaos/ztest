@@ -1,19 +1,13 @@
 version: 2.1
-jobs: # a collection of steps
-  # 定义job的名字为【build】 runs not using Workflows must have a `build` job as entry point，
+jobs: 
   build:
-    # 配置工作目录
     working_directory: /tmp/workspace
-    # 执行环境为docker  run the steps with Docker
     docker:
       - image: circleci/openjdk:8-jdk-stretch
-      # a collection of executable commands ，当前jobs要执行的具体步骤
     steps:
-      # check out source code to working directory 检出源码到工作目录
       - checkout
 
-      - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - restore_cache: 
           key: v1-repo-{{ checksum "pom.xml" }}
       
       - run:
@@ -22,14 +16,11 @@ jobs: # a collection of steps
 
       - run:
           name: build project
-          # 这里进行打包操作
           command: mvn clean install -D maven.test.skip=true
-      # 成功时的运行命令
       - run:
           name: bulid success
           command: echo "build success"
           when: on_success
-      # 失败时的运行命令
       - run:
           name: build fail
           command: echo "build failur"
@@ -38,15 +29,6 @@ jobs: # a collection of steps
           root: .
           paths:
           - ./*
-      # 存储测试结果
-      - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
-        # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-            path: target/surefire-reports
-        
-      - store_artifacts: # store the uberjar as an artifact
-        # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-            path: target/griantBaby-0.0.1-SNAPSHOT.jar
-        # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples 
   deploy:
     machine:
       timezone:
