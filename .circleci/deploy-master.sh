@@ -10,6 +10,6 @@ rsync -vzrc --delete  --exclude ".git"  --exclude ".env"   --exclude ".circleci"
 
 #ssh $user@$host "sudo chown -R www:www $des"
 
-ssh $user@$host "chmod -R 775 $des/bootstrap/cache && chmod -R 775 $des/storage && cd $des && pwd && ls -al"
+ssh $user@$host "chmod -R 775 "$des"bootstrap/cache && chmod -R 775 "$des"storage && cd $des && pwd && ls -al"
 
 echo "$now update $host $des code"
